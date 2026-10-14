@@ -1,0 +1,17 @@
+# Binaries & Object Files
+*.o
+*.obj
+
+# Keep the compiled exes or ignore them? In C repos, gitignore exes, but we can also document how to build
+*.exe
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS / Editor Artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
