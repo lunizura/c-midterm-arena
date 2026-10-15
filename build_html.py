@@ -800,6 +800,118 @@ html_template = """<!DOCTYPE html>
       margin-top: 6px;
     }
 
+    /* Locked Pane Card (Visible Before Answering) */
+    .locked-pane-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 36px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+      box-shadow: var(--shadow-elevated);
+      justify-content: center;
+      min-height: 480px;
+    }
+
+    .lock-shield-badge {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.15);
+    }
+
+    .locked-heading {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.2px;
+      margin: 0;
+    }
+
+    .locked-subtext {
+      font-size: 13.5px;
+      color: var(--text-dim);
+      max-width: 440px;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .locked-subtext code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--accent-blue);
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+    }
+
+    .locked-features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+      max-width: 460px;
+      margin-top: 4px;
+      text-align: left;
+    }
+
+    .locked-feature-pill {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: border-color 0.2s ease;
+    }
+
+    .feat-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .locked-feature-pill strong {
+      display: block;
+      font-size: 12px;
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .feat-desc {
+      font-size: 11px;
+      color: var(--text-dim);
+      line-height: 1.35;
+      margin-top: 2px;
+    }
+
+    .reveal-btn {
+      font-size: 12.5px;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      margin-top: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-dim);
+      border: 1px dashed var(--border-subtle);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .reveal-btn:hover {
+      color: var(--accent-amber);
+      border-color: var(--accent-amber);
+      background: rgba(251, 191, 36, 0.08);
+    }
+
     /* Modal Styling */
     .modal-overlay {
       position: fixed;
@@ -950,58 +1062,105 @@ html_template = """<!DOCTYPE html>
       <!-- Right Pane: Pedagogical Stepper & Memory Visualizer -->
       <section class="right-pane" id="pane-right">
         
-        <!-- Stepper Controls -->
-        <div class="inspector-card">
-          <div class="stepper-header">
-            <span class="card-title">🔍 Step-by-Step Execution Tracer</span>
-            <div class="stepper-controls">
-              <button class="step-btn" onclick="stepReset()" title="Reset to start">⏮</button>
-              <button class="step-btn" onclick="stepPrev()" title="Previous step (Left Arrow)">◀ Prev</button>
-              <button class="step-btn" onclick="stepNext()" title="Next step (Right Arrow)">▶ Next</button>
-              <button class="step-btn" onclick="stepToEnd()" title="Jump to end">⏭</button>
+        <!-- Locked State Card (Visible before answering) -->
+        <div class="locked-pane-card" id="pane-locked">
+          <div class="lock-shield-badge">🔒</div>
+          <h2 class="locked-heading">Answer to Unlock Deep Analysis</h2>
+          <p class="locked-subtext">Choose your answer on the left (<strong>A</strong>, <strong>B</strong>, <strong>C</strong>, or <strong>D</strong>, or press keys <code>1</code>–<code>4</code>) to reveal the machine trace, stack layout, and cognitive trap analysis.</p>
+          <div class="locked-features-grid">
+            <div class="locked-feature-pill">
+              <span class="feat-icon">🔍</span>
+              <div>
+                <strong>Line Stepper</strong>
+                <div class="feat-desc">Scrub machine state forward & backward</div>
+              </div>
+            </div>
+            <div class="locked-feature-pill">
+              <span class="feat-icon">🧠</span>
+              <div>
+                <strong>Stack Memory</strong>
+                <div class="feat-desc">Live variable addresses and values</div>
+              </div>
+            </div>
+            <div class="locked-feature-pill">
+              <span class="feat-icon">⚠️</span>
+              <div>
+                <strong>Trap Spotlight</strong>
+                <div class="feat-desc">The exact pitfall designed to trick students</div>
+              </div>
+            </div>
+            <div class="locked-feature-pill">
+              <span class="feat-icon">💡</span>
+              <div>
+                <strong>Distractors</strong>
+                <div class="feat-desc">Why the wrong answers looked so tempting</div>
+              </div>
             </div>
           </div>
-          <input type="range" class="stepper-slider" id="stepper-slider" min="0" max="1" value="0" oninput="onSliderChange(this.value)">
-          <div class="step-desc-box" id="step-description">
-            Click an answer or use the stepper controls above to inspect line-by-line machine execution.
+          <div>
+            <button class="reveal-btn" onclick="revealAnswer()" title="Peek at the explanation without answering">
+              👁️ Skip & Reveal Explanation
+            </button>
           </div>
         </div>
 
-        <!-- Active Memory Layout Diagram -->
-        <div class="inspector-card" id="memory-card">
-          <span class="card-title">🧠 Stack Memory & Pointer Architecture</span>
-          <div class="memory-view" id="memory-view-content">
-            <table class="mem-table">
-              <thead>
-                <tr>
-                  <th>Variable</th>
-                  <th>Address</th>
-                  <th>Type</th>
-                  <th>Stored Value</th>
-                </tr>
-              </thead>
-              <tbody id="mem-table-body">
-                <tr><td colspan="4" style="color:var(--text-dim); text-align:center;">Select an answer or step forward to inspect stack state.</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <!-- Unlocked State Container (Visible after answering) -->
+        <div id="pane-unlocked" style="display:none; flex-direction:column; gap:16px;">
 
-        <!-- Trap Spotlight Card -->
-        <div class="trap-card" id="trap-spotlight">
-          <div class="trap-card-title">⚠️ The Trap Spotlight</div>
-          <div class="trap-card-text" id="trap-spotlight-text">
-            Loading trap analysis...
+          <!-- Stepper Controls -->
+          <div class="inspector-card">
+            <div class="stepper-header">
+              <span class="card-title">🔍 Step-by-Step Execution Tracer</span>
+              <div class="stepper-controls">
+                <button class="step-btn" onclick="stepReset()" title="Reset to start">⏮</button>
+                <button class="step-btn" onclick="stepPrev()" title="Previous step (Left Arrow)">◀ Prev</button>
+                <button class="step-btn" onclick="stepNext()" title="Next step (Right Arrow)">▶ Next</button>
+                <button class="step-btn" onclick="stepToEnd()" title="Jump to end">⏭</button>
+              </div>
+            </div>
+            <input type="range" class="stepper-slider" id="stepper-slider" min="0" max="1" value="0" oninput="onSliderChange(this.value)">
+            <div class="step-desc-box" id="step-description">
+              Scrub or click Next to step through line-by-line machine execution.
+            </div>
           </div>
-        </div>
 
-        <!-- Cognitive Distractor Breakdown -->
-        <div class="inspector-card">
-          <span class="card-title">💡 Why Your Wrong Answer Was Tempting</span>
-          <div style="display:flex; flex-direction:column; gap:8px;" id="distractor-container">
-            <!-- Populated by JavaScript -->
+          <!-- Active Memory Layout Diagram -->
+          <div class="inspector-card" id="memory-card">
+            <span class="card-title">🧠 Stack Memory & Pointer Architecture</span>
+            <div class="memory-view" id="memory-view-content">
+              <table class="mem-table">
+                <thead>
+                  <tr>
+                    <th>Variable</th>
+                    <th>Address</th>
+                    <th>Type</th>
+                    <th>Stored Value</th>
+                  </tr>
+                </thead>
+                <tbody id="mem-table-body">
+                  <tr><td colspan="4" style="color:var(--text-dim); text-align:center;">Select an answer or step forward to inspect stack state.</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-          <span class="c-standard-badge" id="c-standard-ref">ISO Standard: ISO/IEC 9899 §6.5</span>
+
+          <!-- Trap Spotlight Card -->
+          <div class="trap-card" id="trap-spotlight">
+            <div class="trap-card-title">⚠️ The Trap Spotlight</div>
+            <div class="trap-card-text" id="trap-spotlight-text">
+              Loading trap analysis...
+            </div>
+          </div>
+
+          <!-- Cognitive Distractor Breakdown -->
+          <div class="inspector-card">
+            <span class="card-title">💡 Why Your Wrong Answer Was Tempting</span>
+            <div style="display:flex; flex-direction:column; gap:8px;" id="distractor-container">
+              <!-- Populated by JavaScript -->
+            </div>
+            <span class="c-standard-badge" id="c-standard-ref">ISO Standard: ISO/IEC 9899 §6.5</span>
+          </div>
+
         </div>
 
       </section>
@@ -1294,12 +1453,14 @@ html_template = """<!DOCTYPE html>
       const isBookmarked = State.bookmarks.has(q.id);
       document.getElementById('btn-bookmark').classList.toggle('active', isBookmarked);
 
-      // Render Code Lines
+      const answered = State.userAnswers[q.id];
+
+      // Render Code Lines (Trap lines and tokens strictly hidden until answered!)
       const lines = q.code.split('\\n');
       const viewer = document.getElementById('code-viewer');
       viewer.innerHTML = lines.map((line, idx) => {
         const lineNum = idx + 1;
-        const isTrapLine = (q.trapInfo && q.trapInfo.line === lineNum);
+        const isTrapLine = (answered && q.trapInfo && q.trapInfo.line === lineNum);
         const trapToken = isTrapLine ? q.trapInfo.token : null;
         const formatted = highlightLineC(line, trapToken);
         const trapClass = isTrapLine ? 'trap-line' : '';
@@ -1311,7 +1472,6 @@ html_template = """<!DOCTYPE html>
 
       // Render Options
       const optContainer = document.getElementById('options-container');
-      const answered = State.userAnswers[q.id];
 
       optContainer.innerHTML = q.options.map(opt => {
         let cardClass = "option-card";
@@ -1331,34 +1491,60 @@ html_template = """<!DOCTYPE html>
       document.getElementById('btn-prev').disabled = (State.currentIndex === 0);
       document.getElementById('btn-next').disabled = (State.currentIndex === State.filteredQuestions.length - 1);
 
-      document.getElementById('trap-spotlight-text').innerText = q.trapInfo.shortWarning || q.explanation.summary;
+      // Toggle Right Pane: Locked vs Unlocked
+      const paneLocked = document.getElementById('pane-locked');
+      const paneUnlocked = document.getElementById('pane-unlocked');
 
-      // Distractor Breakdown
-      const distContainer = document.getElementById('distractor-container');
-      distContainer.innerHTML = q.options.map(opt => {
-        const statusBadge = opt.isCorrect ? '<span style="color:var(--accent-green)">✅ Correct Answer</span>' : '<span style="color:var(--accent-red)">❌ Common Misconception</span>';
-        const explanationText = opt.isCorrect ? opt.whyTempting : `${opt.whyTempting} <br><strong style="color:#f87171">Why it's wrong:</strong> ${opt.whyWrong || ''}`;
-        return `
-          <div class="distractor-item">
-            <div class="distractor-header" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'flex' : 'none'">
-              <span>Option ${opt.key}: <code>${escapeHTML(opt.text)}</code></span>
-              <span>${statusBadge}</span>
+      if (!answered) {
+        paneLocked.style.display = 'flex';
+        paneUnlocked.style.display = 'none';
+        document.querySelectorAll('.code-line').forEach(el => el.classList.remove('executing-line'));
+      } else {
+        paneLocked.style.display = 'none';
+        paneUnlocked.style.display = 'flex';
+
+        document.getElementById('trap-spotlight-text').innerText = q.trapInfo.shortWarning || q.explanation.summary;
+
+        // Distractor Breakdown
+        const distContainer = document.getElementById('distractor-container');
+        distContainer.innerHTML = q.options.map(opt => {
+          const isUserPick = (answered.selectedKey === opt.key);
+          const isCorrect = opt.isCorrect;
+          let badgeText = isCorrect ? '✅ Correct Answer' : '❌ Distractor Pitfall';
+          let badgeColor = isCorrect ? 'var(--accent-green)' : 'var(--accent-red)';
+          if (isUserPick && !isCorrect) {
+            badgeText = '❌ Your Choice (Pitfall)';
+          } else if (isUserPick && isCorrect) {
+            badgeText = '✅ Your Choice (Correct)';
+          }
+
+          const statusBadge = `<span style="color:${badgeColor}; font-weight:700;">${badgeText}</span>`;
+          const explanationText = opt.isCorrect ? opt.whyTempting : `${opt.whyTempting} <br><strong style="color:#f87171">Why it's wrong:</strong> ${opt.whyWrong || ''}`;
+          const shouldExpand = isUserPick || isCorrect;
+
+          return `
+            <div class="distractor-item">
+              <div class="distractor-header" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'flex' : 'none'">
+                <span>Option ${opt.key}: <code>${escapeHTML(opt.text)}</code></span>
+                <span>${statusBadge}</span>
+              </div>
+              <div class="distractor-body" style="display: ${shouldExpand ? 'flex' : 'none'};">
+                <div>${explanationText}</div>
+              </div>
             </div>
-            <div class="distractor-body" style="display: ${answered && (answered.selectedKey === opt.key || opt.isCorrect) ? 'flex' : 'none'};">
-              <div>${explanationText}</div>
-            </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('');
 
-      document.getElementById('c-standard-ref').innerText = `ISO Standard: ${q.explanation.cStandardRef}`;
+        document.getElementById('c-standard-ref').innerText = `ISO Standard: ${q.explanation.cStandardRef}`;
 
-      const traces = q.executionTrace || [];
-      const slider = document.getElementById('stepper-slider');
-      slider.max = Math.max(0, traces.length - 1);
-      State.currentStep = (answered ? traces.length - 1 : 0);
-      slider.value = State.currentStep;
-      renderStep();
+        const traces = q.executionTrace || [];
+        const slider = document.getElementById('stepper-slider');
+        slider.max = Math.max(0, traces.length - 1);
+        State.currentStep = (traces.length > 0 ? traces.length - 1 : 0);
+        slider.value = State.currentStep;
+        renderStep();
+      }
+
       updateHeaderStats();
     }
 
@@ -1411,6 +1597,7 @@ html_template = """<!DOCTYPE html>
 
     function stepNext() {
       const q = getActiveQuestion();
+      if (!State.userAnswers[q.id]) return;
       const traces = q.executionTrace || [];
       if (State.currentStep < traces.length - 1) {
         State.currentStep++;
@@ -1420,6 +1607,8 @@ html_template = """<!DOCTYPE html>
     }
 
     function stepPrev() {
+      const q = getActiveQuestion();
+      if (!State.userAnswers[q.id]) return;
       if (State.currentStep > 0) {
         State.currentStep--;
         playSound('step');
@@ -1428,6 +1617,8 @@ html_template = """<!DOCTYPE html>
     }
 
     function stepReset() {
+      const q = getActiveQuestion();
+      if (!State.userAnswers[q.id]) return;
       State.currentStep = 0;
       playSound('step');
       renderStep();
@@ -1435,6 +1626,7 @@ html_template = """<!DOCTYPE html>
 
     function stepToEnd() {
       const q = getActiveQuestion();
+      if (!State.userAnswers[q.id]) return;
       const traces = q.executionTrace || [];
       State.currentStep = Math.max(0, traces.length - 1);
       playSound('step');
@@ -1442,6 +1634,8 @@ html_template = """<!DOCTYPE html>
     }
 
     function onSliderChange(val) {
+      const q = getActiveQuestion();
+      if (!State.userAnswers[q.id]) return;
       State.currentStep = parseInt(val, 10);
       playSound('step');
       renderStep();
@@ -1486,6 +1680,16 @@ html_template = """<!DOCTYPE html>
         }
       }
 
+      saveStorage();
+      renderQuestion();
+    }
+
+    function revealAnswer() {
+      const q = getActiveQuestion();
+      if (State.userAnswers[q.id]) return;
+      State.userAnswers[q.id] = { selectedKey: null, isCorrect: false, revealed: true };
+      State.streak = 0;
+      playSound('thock');
       saveStorage();
       renderQuestion();
     }
@@ -1632,9 +1836,26 @@ html_template = """<!DOCTYPE html>
             `;
           }).join('')}
         </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:12px; border-top:1px solid var(--border-subtle);">
+          <span style="font-size:12px; color:var(--text-dim);">Want to retake all questions?</span>
+          <button class="btn btn-secondary" onclick="resetAllProgress()" style="color:var(--accent-red); border-color:rgba(251,113,133,0.3); font-size:12px; padding:7px 14px;">
+            🔄 Reset Progress & Start Fresh
+          </button>
+        </div>
       `;
 
       modal.classList.add('open');
+    }
+
+    function resetAllProgress() {
+      if (!confirm("Are you sure you want to reset all your answer history and start fresh?")) return;
+      State.userAnswers = {};
+      State.streak = 0;
+      saveStorage();
+      closeModal('report-modal');
+      renderQuestion();
+      updateHeaderStats();
     }
 
     function closeModal(id) {
