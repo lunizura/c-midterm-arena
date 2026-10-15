@@ -1,15 +1,13 @@
 # export_c_header.py
 import json
-from generate_questions import add_q, questions
-from bank_part1 import load_part1
-from bank_part2 import load_part2
-from bank_part3 import load_part3
-from bank_part4 import load_part4
+from generate_syllabus_questions import add_q, questions
+from syllabus_part1 import load_part1
+from syllabus_part2 import load_part2
+from syllabus_part3 import load_part3
 
 load_part1(add_q)
 load_part2(add_q)
 load_part3(add_q)
-load_part4(add_q)
 
 def c_escape(s):
     if s is None:
@@ -96,7 +94,6 @@ for q in questions:
         t = traces[i]
         vars_str = ", ".join(f"{k}={v}" for k, v in t.get("variables", {}).items())
         c_content.append(f'      {{ .step = {t["step"]}, .line = {t["line"]}, .description = {c_escape(t["description"])}, .variables_summary = {c_escape(vars_str)} }},\n')
-    # Pad if less than 8
     for i in range(trace_cnt, 8):
         c_content.append('      { 0, 0, "", "" },\n')
     c_content.append('    },\n')
@@ -108,4 +105,4 @@ c_content.append('};\n')
 with open("src/questions.c", "w", encoding="utf-8") as f:
     f.writelines(c_content)
 
-print("Exported src/questions.h and src/questions.c successfully!")
+print("Exported src/questions.h and src/questions.c with syllabus questions successfully!")

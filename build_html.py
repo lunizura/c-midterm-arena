@@ -3,16 +3,14 @@
 # visually stunning, sound-equipped standalone single-file HTML5 app (index.html).
 
 import json
-from generate_questions import add_q, questions
-from bank_part1 import load_part1
-from bank_part2 import load_part2
-from bank_part3 import load_part3
-from bank_part4 import load_part4
+from generate_syllabus_questions import add_q, questions
+from syllabus_part1 import load_part1
+from syllabus_part2 import load_part2
+from syllabus_part3 import load_part3
 
 load_part1(add_q)
 load_part2(add_q)
 load_part3(add_q)
-load_part4(add_q)
 
 questions_json = json.dumps(questions, indent=2)
 
@@ -897,16 +895,14 @@ html_template = """<!DOCTYPE html>
 
     <!-- Subheader / Category Filter Bar -->
     <nav class="filter-bar" id="category-filter-bar">
-      <button class="filter-chip active" onclick="setCategoryFilter('ALL')">All Questions (100)</button>
-      <button class="filter-chip" onclick="setCategoryFilter('CAT_PREC_EVAL')">1. Precedence & Short-Circuit (14)</button>
-      <button class="filter-chip" onclick="setCategoryFilter('CAT_PTR_ARR')">2. Pointers & Arrays (18)</button>
-      <button class="filter-chip" onclick="setCategoryFilter('CAT_INT_PROM')">3. Integer Promotions (14)</button>
-      <button class="filter-chip" onclick="setCategoryFilter('CAT_STR_LIT')">4. Strings & Literals (12)</button>
-      <button class="filter-chip" onclick="setCategoryFilter('CAT_SCOPE_LIFETIME')">5. Scope & Static (12)</button>
-      <button class="filter-chip" onclick="setCategoryFilter('CAT_SEQ_UB')">6. Sequence Points & UB (10)</button>
-      <button class="filter-chip" onclick="setCategoryFilter('CAT_CONTROL_FLOW')">7. Control Flow Quirks (10)</button>
-      <button class="filter-chip" onclick="setCategoryFilter('CAT_MACRO_PREPROC')">8. Preprocessor Macros (10)</button>
-      <button class="filter-chip" onclick="setCategoryFilter('BOOKMARKED')">⭐ Bookmarked Only</button>
+      <button class="filter-chip active" data-cat="ALL" onclick="setCategoryFilter('ALL')">All Syllabus Questions (100)</button>
+      <button class="filter-chip" data-cat="TOPIC_DATATYPES" onclick="setCategoryFilter('TOPIC_DATATYPES')">1. Data Types & Variables (16)</button>
+      <button class="filter-chip" data-cat="TOPIC_OPERATORS" onclick="setCategoryFilter('TOPIC_OPERATORS')">2. Operators & Expressions (18)</button>
+      <button class="filter-chip" data-cat="TOPIC_CONDITIONALS" onclick="setCategoryFilter('TOPIC_CONDITIONALS')">3. Conditionals (if/switch) (16)</button>
+      <button class="filter-chip" data-cat="TOPIC_LOOPS" onclick="setCategoryFilter('TOPIC_LOOPS')">4. Loops (for/while/do-while) (18)</button>
+      <button class="filter-chip" data-cat="TOPIC_FUNCTIONS" onclick="setCategoryFilter('TOPIC_FUNCTIONS')">5. Functions & Procedures (16)</button>
+      <button class="filter-chip" data-cat="TOPIC_ARRAYS" onclick="setCategoryFilter('TOPIC_ARRAYS')">6. Arrays & Strings (16)</button>
+      <button class="filter-chip" data-cat="BOOKMARKED" onclick="setCategoryFilter('BOOKMARKED')">⭐ Bookmarked Only</button>
     </nav>
 
     <!-- Main Split Arena -->
@@ -915,7 +911,7 @@ html_template = """<!DOCTYPE html>
       <section class="left-pane" id="pane-left">
         <div class="q-meta">
           <div class="q-badges">
-            <span class="badge cat" id="q-category">CAT_PTR_ARR</span>
+            <span class="badge cat" id="q-category">Data Types</span>
             <span class="badge tricky" id="q-difficulty">Tricky</span>
           </div>
           <div class="q-index" id="q-id-label">Question Q001</div>
@@ -1279,7 +1275,15 @@ html_template = """<!DOCTYPE html>
       const q = getActiveQuestion();
       if (!q) return;
 
-      document.getElementById('q-category').innerText = q.category.replace('CAT_', '');
+      const catMap = {
+        'TOPIC_DATATYPES': 'Data Types & Variables',
+        'TOPIC_OPERATORS': 'Operators & Expressions',
+        'TOPIC_CONDITIONALS': 'Conditionals',
+        'TOPIC_LOOPS': 'Loops',
+        'TOPIC_FUNCTIONS': 'Functions & Procedures',
+        'TOPIC_ARRAYS': 'Arrays & Strings'
+      };
+      document.getElementById('q-category').innerText = catMap[q.category] || q.category.replace(/^TOPIC_|^CAT_/, '');
       const diffEl = document.getElementById('q-difficulty');
       diffEl.innerText = q.difficulty;
       diffEl.className = 'badge ' + q.difficulty.toLowerCase();
@@ -1519,7 +1523,7 @@ html_template = """<!DOCTYPE html>
       playSound('thock');
 
       document.querySelectorAll('.filter-chip').forEach(el => {
-        el.classList.toggle('active', el.innerText.includes(cat) || (cat === 'ALL' && el.innerText.includes('All')) || (cat === 'BOOKMARKED' && el.innerText.includes('Bookmarked')));
+        el.classList.toggle('active', el.dataset.cat === cat);
       });
 
       if (cat === 'ALL') {

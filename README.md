@@ -18,22 +18,20 @@ This repository comes with **two complete editions**:
 |---|---|---|
 | **🖥️ Desktop Window App** (`c_arena_desktop.exe`) | Native C Windows GUI Launcher + Cyber-Glass Engine | Translucent frosted glass, 60fps canvas particles, mechanical keyboard sound effects, interactive memory diagrams, and zero browser tabs/URL bars. |
 | **⚡ Terminal CLI Edition** (`c_arena_cli.exe`) | 100% Pure C (`<stdio.h>`, `<windows.h>`) | ANSI color escape syntax highlighting, interactive line-by-line terminal debugger stepper, and hardware audio chimes via `Beep()`. |
-| **🌐 Standalone Web Edition** (`c_midterm_arena.html`) | Single-file HTML5/CSS/JS (274 KB) | 100% offline, zero install, shareable via WhatsApp/Discord or hostable on GitHub Pages. |
+| **🌐 Standalone Web Edition** (`c_midterm_arena.html`) | Single-file HTML5/CSS/JS (247 KB) | 100% offline, zero install, shareable via WhatsApp/Discord or hostable on GitHub Pages. |
 
 ---
 
-## 📚 100 Exam Traps Across 8 Categories
+## 📚 100 Exam Traps Strictly Calibrated to the 6 Course Modules
 
-College professors design multiple-choice C midterm exams around specific cognitive traps. Every single question in this arena is verified against ISO C standards (**ISO/IEC 9899**):
+Every single question is strictly calibrated to the official university midterm syllabus for *Konsep Pemrograman*, testing real multiple-choice exam traps:
 
-1. **Operator Precedence & Short-Circuiting (14 Qs)**: `*p++` vs `(*p)++`, `a++ || b++` skipping `b++`, `1 << 2 + 3`, ternary grouping.
-2. **Pointer Arithmetic & Array Decay (18 Qs)**: `arr` vs `&arr` strides, `sizeof` decay in functions, commutative `i[arr]`, pointer differences.
-3. **Integer Promotions & Truncation (14 Qs)**: `5 / 2` truncation, signed vs unsigned comparison (`-1 < 1U`), float literal precision (`0.1f == 0.1`).
-4. **Strings & Null Terminators (12 Qs)**: String literal immutability (`.rodata` segfault), `sizeof` vs `strlen`, `char s[5] = "hello"` bounds overread.
-5. **Scope, Storage Duration & Memory (12 Qs)**: `static` variable retention, dangling stack pointer returns, inner block shadowing.
-6. **Sequence Points & Undefined Behavior (10 Qs)**: Unsequenced `i = i++`, unsequenced `arr[i] = i++`, signed overflow UB.
-7. **Control Flow Quirks & Semicolons (10 Qs)**: Accidental `if (x > 5);`, `for (...);`, `switch` fallthrough without `break`, `if (x = 5)`.
-8. **Preprocessor Macro Hazards (10 Qs)**: `SQUARE(2 + 3)` expanding to `2 + 3 * 2 + 3 = 11`, macro side effect duplication (`DOUBLE(x++)`).
+1. **Data Types & Variables (16 Qs)**: Primitive sizes & formats (`%d`, `%f`, `%c`, `%lf`), integer overflow & wrap-around, character ASCII mechanics (`'5' - '0'`), floating-point division (`5 / 2 = 2`), implicit type conversion, variable shadowing, and `const` qualifiers.
+2. **Operators & Expressions (18 Qs)**: Precedence & associativity rules, post-increment vs pre-increment (`x++` vs `++x`), compound assignment quirks (`x *= y + 1`), logical short-circuit evaluation (`&&` and `||`), bitwise shifts (`<<`, `>>`, `&`, `|`, `^`), and modulo sign rules.
+3. **Conditionals (if / switch) (16 Qs)**: The assignment bug in condition `if (x = 5)`, floating-point comparison pitfalls, dangling `else` binding to the nearest `if`, `switch` fallthrough without `break`, duplicate case constants, and ternary operator nesting.
+4. **Loops (for / while / do-while) (18 Qs)**: The accidental semicolon trap (`for (...);` / `while (...);`), post-increment in loop tests, off-by-one boundary conditions, `break` vs `continue` behaviors in nested loops, and `do-while` guaranteed first execution.
+5. **Functions & Procedures (16 Qs)**: Pass-by-value mechanics (local modifications do not affect caller), function declaration vs definition, implicit return values, recursive call stack unwinding & base case verification, and static local variable persistence across invocations.
+6. **Arrays & Strings (16 Qs)**: 0-based indexing and buffer boundary traps (`arr[N]`), partial array initialization zero-padding, multidimensional matrix row-major storage `arr[row][col]`, string null terminators `\0`, `sizeof(arr)` vs length, and `char s[] = "hi"` vs character arrays.
 
 ---
 
