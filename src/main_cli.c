@@ -75,6 +75,7 @@ void draw_banner(void) {
 }
 
 void print_code_with_traps(const char *code, int trap_line, const char *trap_token, int active_line) {
+    (void)trap_token;
     char buffer[2048];
     strncpy(buffer, code, sizeof(buffer) - 1);
     buffer[sizeof(buffer) - 1] = '\0';
@@ -231,7 +232,45 @@ void practice_mode(void) {
     getchar();
 }
 
-int main(void) {
+int main(int argc, char *argv[]) {
+    if (argc > 1) {
+        if (strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-h") == 0) {
+            printf("C Midterm Arena - CLI Edition (Pure C99)\n");
+            printf("Usage: c_arena_cli.exe [options]\n\n");
+            printf("Options:\n");
+            printf("  -h, --help       Show this help message and exit\n");
+            printf("  -v, --version    Show version information and exit\n");
+            printf("  -t, --test       Run non-interactive integrity check of question bank\n");
+            return 0;
+        }
+        if (strcmp(argv[1], "--version") == 0 || strcmp(argv[1], "-v") == 0) {
+            printf("c_arena_cli version 1.0.0\n");
+            return 0;
+        }
+        if (strcmp(argv[1], "--test") == 0 || strcmp(argv[1], "-t") == 0) {
+            printf("Running question bank integrity test across %d questions...\n", TOTAL_QUESTIONS);
+            int valid_count = 0;
+            for (int i = 0; i < TOTAL_QUESTIONS; i++) {
+                const Question *q = &ALL_QUESTIONS[i];
+                if (!q->id || !q->title || !q->code) {
+                    fprintf(stderr, "Question %d missing core fields!\n", i + 1);
+                    return 1;
+                }
+                int correct_options = 0;
+                for (int opt = 0; opt < 4; opt++) {
+                    if (q->options[opt].is_correct) correct_options++;
+                }
+                if (correct_options != 1) {
+                    fprintf(stderr, "Question %d has invalid correct options count (%d)!\n", i + 1, correct_options);
+                    return 1;
+                }
+                valid_count++;
+            }
+            printf("PASS: All %d questions verified (valid schemas and single correct answer).\n", valid_count);
+            return 0;
+        }
+    }
+
     enable_virtual_terminal();
 
     while (1) {
@@ -261,7 +300,13 @@ int main(void) {
                 break;
             case '4': {
                 printf("\nLaunching dedicated Desktop GUI App...\n");
-                system("powershell -Command \"Start-Process msedge.exe -ArgumentList '--app=\"file:///' + (Get-Location).Path.Replace('\\', '/') + '/c_midterm_arena.html\"'\"");
+                if (GetFileAttributesA("c_midterm_arena.html") != INVALID_FILE_ATTRIBUTES) {
+                    system("powershell -Command \"Start-Process msedge.exe -ArgumentList '--app=\"file:///' + (Get-Location).Path.Replace('\\', '/') + '/c_midterm_arena.html\"'\"");
+                } else if (GetFileAttributesA("index.html") != INVALID_FILE_ATTRIBUTES) {
+                    system("powershell -Command \"Start-Process msedge.exe -ArgumentList '--app=\"file:///' + (Get-Location).Path.Replace('\\', '/') + '/index.html\"'\"");
+                } else {
+                    system("powershell -Command \"Start-Process msedge.exe -ArgumentList '--app=https://lunizura.github.io/c-midterm-arena/'\"");
+                }
                 Sleep(1000);
                 break;
             }

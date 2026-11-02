@@ -31,9 +31,12 @@ jobs:
           gcc -O2 -std=c99 -Wall -Wextra src/main_cli.c src/questions.c -o c_arena_cli.exe
           gcc -O2 -Wall -Wextra -mwindows src/app_launcher.c -o c_arena_desktop.exe
 
-      - name: Verify Binary Output
+      - name: Verify Binary Output & Question Bank Integrity
         shell: pwsh
         run: |
           if (-not (Test-Path "c_arena_cli.exe")) { throw "c_arena_cli.exe missing" }
           if (-not (Test-Path "c_arena_desktop.exe")) { throw "c_arena_desktop.exe missing" }
-          Write-Host "Both c_arena_cli.exe and c_arena_desktop.exe verified successfully!"
+          .\c_arena_cli.exe --version
+          .\c_arena_cli.exe --help
+          .\c_arena_cli.exe --test
+          Write-Host "Both c_arena_cli.exe and c_arena_desktop.exe compiled and verified successfully!"
