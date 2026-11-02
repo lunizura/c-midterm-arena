@@ -1,0 +1,39 @@
+name: C Midterm Arena CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build & Verify C Binaries
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify Question Bank Generation
+        run: |
+          python export_c_header.py
+          python build_html.py
+
+      - name: Compile C Binaries (CLI & Desktop Launcher)
+        run: |
+          gcc -O2 -std=c99 -Wall -Wextra src/main_cli.c src/questions.c -o c_arena_cli.exe
+          gcc -O2 -Wall -Wextra -mwindows src/app_launcher.c -o c_arena_desktop.exe
+
+      - name: Verify Binary Output
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "c_arena_cli.exe")) { throw "c_arena_cli.exe missing" }
+          if (-not (Test-Path "c_arena_desktop.exe")) { throw "c_arena_desktop.exe missing" }
+          Write-Host "Both c_arena_cli.exe and c_arena_desktop.exe verified successfully!"
