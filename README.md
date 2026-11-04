@@ -80,9 +80,25 @@ gcc -O2 -mwindows src/app_launcher.c -o c_arena_desktop.exe
 | `1`, `2`, `3`, `4` or `A`, `B`, `C`, `D` | Select Multiple Choice Option |
 | `Space` or `Enter` | Next Question |
 | `Left Arrow` / `Right Arrow` | Step Execution Back / Forward |
-| `B` | Bookmark / Star Question for review |
+| `K` | Bookmark / Star Question for review |
+| `P` | Open Question Palette Navigator Modal |
 | `M` | Mute / Unmute Audio Synthesizer |
 | `T` (CLI mode) | Open Terminal Line-by-Line Stepper |
+
+---
+
+## 🧪 Automated E2E Test Suite
+
+The repository includes a comprehensive 4-tier automated test harness (38 test suites) ensuring zero regression, balanced answer distributions, and strict C snippet compilation:
+
+```bash
+python tests/run_all_tests.py
+```
+
+* **Tier 1 — Question Schema & Pedagogy**: Verifies schema fields, distractor rationale, and balanced 25% key distributions (25 A / 25 B / 25 C / 25 D).
+* **Tier 2 — C Snippet GCC Compilation**: Compiles and verifies all non-error C snippets with GCC.
+* **Tier 3 — Asset Build Pipeline**: Validates that `build_html.py` generates web assets cleanly with exit code 0.
+* **Tier 4 — Deliverable Integrity & UX**: Audits `c_midterm_arena.html` and `index.html` for escape safety, shortcut bindings, and UI state integrity.
 
 ---
 
