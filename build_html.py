@@ -210,6 +210,14 @@ html_template = """<!DOCTYPE html>
     .stat-pill.streak { color: var(--accent-amber); border-color: rgba(251, 191, 36, 0.2); }
     .stat-pill.lives { color: var(--accent-red); border-color: rgba(251, 113, 133, 0.2); }
     .stat-pill.accuracy { color: var(--accent-green); border-color: rgba(52, 211, 153, 0.2); }
+    .stat-pill.timer { color: var(--accent-blue); border-color: rgba(56, 189, 248, 0.3); font-weight: 700; }
+    .stat-pill.timer.timer-warning { color: var(--accent-amber); border-color: rgba(251, 191, 36, 0.5); }
+    .stat-pill.timer.timer-urgent { color: var(--accent-red); border-color: var(--accent-red); animation: timer-pulse 1s infinite; }
+
+    @keyframes timer-pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(251, 113, 133, 0); }
+      50% { transform: scale(1.05); box-shadow: 0 0 12px var(--accent-red-glow); }
+    }
 
     .header-actions {
       display: flex;
@@ -291,10 +299,105 @@ html_template = """<!DOCTYPE html>
     }
 
     @media (max-width: 1024px) {
+      body {
+        overflow-y: auto;
+      }
+      #arena-root {
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+      header {
+        flex-wrap: wrap;
+        padding: 10px 14px;
+        gap: 10px;
+        height: auto;
+      }
+      .brand-group {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .mode-bar {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .header-stats {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .header-actions {
+        margin-left: auto;
+      }
       main {
         grid-template-columns: 1fr;
         height: auto;
         overflow: visible;
+      }
+      .left-pane, .right-pane {
+        overflow: visible;
+        height: auto;
+        padding: 16px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 8px 10px;
+        gap: 8px;
+      }
+      .brand-title span:first-child {
+        font-size: 13px;
+      }
+      .brand-subtitle {
+        display: none;
+      }
+      .logo-badge {
+        padding: 4px 8px;
+        font-size: 11px;
+      }
+      .mode-bar {
+        gap: 4px;
+        width: 100%;
+      }
+      .mode-btn {
+        padding: 4px 8px;
+        font-size: 11px;
+        flex: 1 1 auto;
+        justify-content: center;
+      }
+      .header-stats {
+        width: 100%;
+        justify-content: center;
+        gap: 6px;
+      }
+      .stat-pill {
+        padding: 4px 8px;
+        font-size: 11px;
+        gap: 4px;
+      }
+      .header-actions {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        gap: 6px;
+      }
+      .icon-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 13px;
+      }
+      .palette-grid {
+        grid-template-columns: repeat(5, 1fr) !important;
+      }
+      .left-pane, .right-pane {
+        padding: 12px;
+      }
+      .option-card {
+        padding: 12px 14px;
+        gap: 10px;
+        font-size: 13px;
       }
     }
 
@@ -960,6 +1063,149 @@ html_template = """<!DOCTYPE html>
       align-items: center;
       justify-content: space-between;
     }
+
+    /* Deep Dive Pedagogical Walkthrough Styles */
+    .deep-dive-content {
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .deep-dive-para {
+      margin: 0;
+      color: #cbd5e1;
+    }
+    .deep-dive-h3, .deep-dive-h4 {
+      color: var(--accent-blue);
+      font-weight: 700;
+      margin-top: 6px;
+    }
+    .deep-dive-inline {
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent-blue);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+    }
+    .deep-dive-pre {
+      background: var(--bg-code);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: #a3e635;
+    }
+    .deep-dive-list {
+      padding-left: 20px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .deep-dive-list li {
+      color: #cbd5e1;
+    }
+
+    /* Question Palette Styles */
+    .palette-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      background: var(--bg-surface-elevated);
+      border-radius: var(--radius-sm);
+    }
+    .legend-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .legend-dot.correct { background: var(--accent-green); }
+    .legend-dot.wrong { background: var(--accent-red); }
+    .legend-dot.revealed { background: var(--accent-amber); }
+    .legend-dot.bookmarked { color: var(--accent-amber); font-size: 12px; }
+    .legend-dot.active { background: var(--accent-blue); }
+    .legend-dot.unanswered { background: #334155; }
+
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+      max-height: 50vh;
+      overflow-y: auto;
+      padding: 4px;
+    }
+    .palette-tile {
+      aspect-ratio: 1;
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .palette-tile:hover {
+      transform: scale(1.1);
+      border-color: var(--accent-blue);
+      color: var(--text-main);
+      z-index: 2;
+    }
+    .palette-tile.active {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 10px var(--accent-blue-glow);
+      color: var(--text-main);
+      font-weight: 800;
+    }
+    .palette-tile.correct {
+      background: rgba(52, 211, 153, 0.2);
+      color: var(--accent-green);
+      border-color: rgba(52, 211, 153, 0.5);
+    }
+    .palette-tile.wrong {
+      background: rgba(251, 113, 133, 0.2);
+      color: var(--accent-red);
+      border-color: rgba(251, 113, 133, 0.5);
+    }
+    .palette-tile.revealed {
+      background: rgba(251, 191, 36, 0.2);
+      color: var(--accent-amber);
+      border-color: rgba(251, 191, 36, 0.5);
+    }
+    .palette-tile.bookmarked::after {
+      content: '★';
+      position: absolute;
+      top: 1px;
+      right: 2px;
+      font-size: 8px;
+      color: var(--accent-amber);
+    }
+
+    /* Print Stylesheet */
+    @media print {
+      body { background: white !important; color: black !important; }
+      #arena-root, #particle-canvas, .modal-overlay:not(#report-modal) { display: none !important; }
+      #report-modal { position: static !important; opacity: 1 !important; pointer-events: auto !important; background: none !important; }
+      .modal-box { box-shadow: none !important; border: none !important; width: 100% !important; max-width: 100% !important; color: black !important; }
+    }
   </style>
 </head>
 <body>
@@ -990,6 +1236,7 @@ html_template = """<!DOCTYPE html>
 
       <!-- Stats & Live Telemetry -->
       <div class="header-stats">
+        <div class="stat-pill timer" id="stat-timer" style="display:none;" title="Exam Countdown Timer">⏱️ 30:00</div>
         <div class="stat-pill streak" id="stat-streak" title="Correct Streak">🔥 0</div>
         <div class="stat-pill lives" id="stat-lives" style="display:none;" title="Lives Remaining">❤️❤️❤️</div>
         <div class="stat-pill accuracy" id="stat-score" title="Accuracy Rate">0%</div>
@@ -999,7 +1246,8 @@ html_template = """<!DOCTYPE html>
       <!-- Header Tools -->
       <div class="header-actions">
         <button class="icon-btn active" id="btn-audio" onclick="toggleAudio()" title="Sound Effects (M)">🔊</button>
-        <button class="icon-btn" id="btn-bookmark" onclick="toggleBookmark()" title="Bookmark Trap (B)">⭐</button>
+        <button class="icon-btn" id="btn-bookmark" onclick="toggleBookmark()" title="Bookmark Trap (K)">⭐</button>
+        <button class="icon-btn" id="btn-palette" onclick="openPaletteModal()" title="Question Palette (P)">▦</button>
         <button class="icon-btn" onclick="openShortcutsModal()" title="Keyboard Shortcuts">⌨️</button>
         <button class="icon-btn" onclick="openReportModal()" title="Export Study Guide">📋</button>
       </div>
@@ -1161,6 +1409,12 @@ html_template = """<!DOCTYPE html>
             <span class="c-standard-badge" id="c-standard-ref">ISO Standard: ISO/IEC 9899 §6.5</span>
           </div>
 
+          <!-- In-Depth Pedagogical Walkthrough Card -->
+          <div class="inspector-card" id="deep-dive-card">
+            <span class="card-title">📖 In-Depth Pedagogical Walkthrough</span>
+            <div class="deep-dive-content" id="deep-dive-text"></div>
+          </div>
+
         </div>
 
       </section>
@@ -1179,10 +1433,72 @@ html_template = """<!DOCTYPE html>
           <tr><td><kbd>1</kbd> / <kbd>2</kbd> / <kbd>3</kbd> / <kbd>4</kbd> or <kbd>A</kbd> / <kbd>B</kbd> / <kbd>C</kbd> / <kbd>D</kbd></td><td>Select Multiple Choice Option</td></tr>
           <tr><td><kbd>Space</kbd> or <kbd>Enter</kbd></td><td>Next Question</td></tr>
           <tr><td><kbd>Left Arrow</kbd> / <kbd>Right Arrow</kbd></td><td>Step Execution Back / Forward</td></tr>
-          <tr><td><kbd>B</kbd></td><td>Bookmark / Star Question</td></tr>
+          <tr><td><kbd>K</kbd></td><td>Bookmark / Star Question</td></tr>
+          <tr><td><kbd>P</kbd></td><td>Open Question Palette Navigator</td></tr>
           <tr><td><kbd>M</kbd></td><td>Mute / Unmute Audio Synthesizer</td></tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- Question Palette Modal -->
+  <div class="modal-overlay" id="palette-modal" onclick="closeModalOnOuter(event, 'palette-modal')">
+    <div class="modal-box" style="max-width: 700px;">
+      <div class="modal-title">
+        <span>▦ Question Palette Navigator</span>
+        <button class="icon-btn" onclick="closeModal('palette-modal')">✕</button>
+      </div>
+      <div class="palette-legend">
+        <span><span class="legend-dot correct"></span> Correct</span>
+        <span><span class="legend-dot wrong"></span> Trap / Wrong</span>
+        <span><span class="legend-dot revealed"></span> Revealed</span>
+        <span><span class="legend-dot bookmarked">★</span> Bookmarked</span>
+        <span><span class="legend-dot active"></span> Current</span>
+        <span><span class="legend-dot unanswered"></span> Unanswered</span>
+      </div>
+      <div class="palette-grid" id="palette-grid-content">
+        <!-- Populated by JavaScript -->
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+        <span style="font-size:12px; color:var(--text-dim);" id="palette-summary">100 questions total</span>
+        <button class="btn btn-secondary" onclick="closeModal('palette-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Survival Mode Game Over Modal -->
+  <div class="modal-overlay" id="game-over-modal" onclick="closeModalOnOuter(event, 'game-over-modal')">
+    <div class="modal-box" style="max-width: 520px; text-align: center; align-items: center;">
+      <div style="font-size: 48px; margin-bottom: -10px;">💀</div>
+      <h2 style="font-size: 24px; font-weight: 800; color: var(--accent-red);">Game Over - Out of Lives!</h2>
+      <p style="color: var(--text-muted); font-size: 14px; max-width: 400px;">
+        You ran out of lives in Survival Mode. Every trap in C tests a fundamental concept—don't give up!
+      </p>
+      <div id="game-over-stats" style="display: flex; gap: 16px; justify-content: center; width: 100%; margin: 10px 0;">
+        <!-- Populated by JS -->
+      </div>
+      <div style="display: flex; gap: 12px; justify-content: center; width: 100%; margin-top: 8px;">
+        <button class="btn btn-primary" onclick="restartSurvival()" style="background: var(--accent-red); border-color: var(--accent-red);">🔄 Try Again (3 Lives)</button>
+        <button class="btn btn-secondary" onclick="closeModal('game-over-modal'); openReportModal();">📋 Review Missed Traps</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exam Rush Time Up / Submission Modal -->
+  <div class="modal-overlay" id="rush-finish-modal" onclick="closeModalOnOuter(event, 'rush-finish-modal')">
+    <div class="modal-box" style="max-width: 520px; text-align: center; align-items: center;">
+      <div style="font-size: 48px; margin-bottom: -10px;" id="rush-finish-icon">⏰</div>
+      <h2 style="font-size: 24px; font-weight: 800; color: var(--accent-amber);" id="rush-finish-title">Time's Up!</h2>
+      <p style="color: var(--text-muted); font-size: 14px; max-width: 400px;" id="rush-finish-msg">
+        The 30-minute Exam Rush timer has expired. Your exam has been automatically submitted.
+      </p>
+      <div id="rush-finish-stats" style="display: flex; gap: 16px; justify-content: center; width: 100%; margin: 10px 0;">
+        <!-- Populated by JS -->
+      </div>
+      <div style="display: flex; gap: 12px; justify-content: center; width: 100%; margin-top: 8px;">
+        <button class="btn btn-primary" onclick="closeModal('rush-finish-modal'); setMode('RUSH');">⚡ Retake Rush (30Q)</button>
+        <button class="btn btn-secondary" onclick="closeModal('rush-finish-modal'); openReportModal();">📋 View Score Report</button>
+      </div>
     </div>
   </div>
 
@@ -1224,7 +1540,9 @@ html_template = """<!DOCTYPE html>
       currentStep: 0,
       audioEnabled: true,
       audioCtx: null,
-      trauma: 0                  // For screen shake
+      trauma: 0,                 // For screen shake
+      rushTimerSeconds: 30 * 60, // 30-minute exam countdown (1800s)
+      timerInterval: null
     };
 
     /* -------------------------------------------------------------
@@ -1400,27 +1718,123 @@ html_template = """<!DOCTYPE html>
     }
 
     /* -------------------------------------------------------------
-       SYNTAX HIGHLIGHTER
+       SYNTAX HIGHLIGHTER & FORMATTERS
        ------------------------------------------------------------- */
     function escapeHTML(str) {
-      return str.replace(/[&<>'"]/g, tag => ({
+      if (str === null || str === undefined) return '';
+      return String(str).replace(/[&<>'"]/g, tag => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
       }[tag] || tag));
     }
 
     function highlightLineC(rawLine, trapToken) {
-      let line = escapeHTML(rawLine);
-      line = line.replace(/(\/\/.*$|\/\*.*?\*\/)/g, '<span class="tok-cmt">$1</span>');
-      line = line.replace(/(^\s*#\s*[a-zA-Z_]+)/g, '<span class="tok-pre">$1</span>');
-      line = line.replace(/(["'])(?:(?=(\\?))\2.)*?\1/g, '<span class="tok-str">$&</span>');
-      line = line.replace(/\\b(int|char|float|double|void|long|short|unsigned|signed|size_t|ptrdiff_t)\\b/g, '<span class="tok-type">$1</span>');
-      line = line.replace(/\\b(return|if|else|for|while|do|switch|case|default|break|continue|static|extern|const|volatile|sizeof|typedef|struct|union|enum)\\b/g, '<span class="tok-kw">$1</span>');
-      line = line.replace(/\\b(0x[0-9a-fA-F]+|0[0-7]+|\\d+\\.?\\d*f?)\\b/g, '<span class="tok-num">$1</span>');
-
-      if (trapToken && line.includes(trapToken)) {
-        line = line.replaceAll(trapToken, `<mark class="trap-token">${trapToken}</mark>`);
+      if (!rawLine) return '';
+      const spans = [];
+      function stash(html) {
+        const idx = spans.length;
+        spans.push(html);
+        return `___STASH_${idx}___`;
       }
-      return line;
+
+      let working = rawLine;
+      if (trapToken && working.includes(trapToken)) {
+        const escapedTrap = escapeHTML(trapToken);
+        working = working.split(trapToken).join(stash(`<mark class="trap-token">${escapedTrap}</mark>`));
+      }
+
+      // Comments
+      working = working.replace(/(\/\/.*$|\/\*.*?\*\/)/g, match => stash(`<span class="tok-cmt">${escapeHTML(match)}</span>`));
+
+      // String and character literals
+      working = working.replace(/"(?:[^"\\]|\\.)*"/g, match => stash(`<span class="tok-str">${escapeHTML(match)}</span>`));
+      working = working.replace(/'(?:[^'\\]|\\.)*'/g, match => stash(`<span class="tok-str">${escapeHTML(match)}</span>`));
+
+      // Preprocessor
+      working = working.replace(/(^\s*#\s*[a-zA-Z_]+)/g, match => stash(`<span class="tok-pre">${escapeHTML(match)}</span>`));
+
+      // Escape HTML for remaining code
+      working = escapeHTML(working);
+
+      // Types
+      working = working.replace(/\\b(int|char|float|double|void|long|short|unsigned|signed|size_t|ptrdiff_t|bool)\\b/g, '<span class="tok-type">$1</span>');
+
+      // Keywords
+      working = working.replace(/\\b(return|if|else|for|while|do|switch|case|default|break|continue|static|extern|const|volatile|sizeof|typedef|struct|union|enum)\\b/g, '<span class="tok-kw">$1</span>');
+
+      // Numbers
+      working = working.replace(/\\b(0x[0-9a-fA-F]+|0[0-7]+|\\d+\\.?\\d*f?)\\b/g, '<span class="tok-num">$1</span>');
+
+      // Restore stashed spans
+      working = working.replace(/___STASH_(\\d+)___/g, (match, id) => spans[Number(id)]);
+
+      return working;
+    }
+
+    function formatMarkdown(text) {
+      if (!text) return '';
+      let src = String(text).trim();
+
+      const codeBlocks = [];
+      src = src.replace(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g, (match, lang, code) => {
+        const idx = codeBlocks.length;
+        codeBlocks.push(`<pre class="deep-dive-pre"><code>${escapeHTML(code.trim())}</code></pre>`);
+        return `%%%CODEBLOCK_${idx}%%%`;
+      });
+
+      const inlineCodes = [];
+      src = src.replace(/`([^`]+)`/g, (match, code) => {
+        const idx = inlineCodes.length;
+        inlineCodes.push(`<code class="deep-dive-inline">${escapeHTML(code)}</code>`);
+        return `%%%INLINECODE_${idx}%%%`;
+      });
+
+      // Escape raw text so C headers like <stdio.h> / <math.h> are protected
+      src = escapeHTML(src);
+
+      // Restore inline codes
+      src = src.replace(/%%%INLINECODE_(\\d+)%%%/g, (match, idx) => inlineCodes[Number(idx)]);
+
+      // Headings
+      src = src.replace(/^#### (.*$)/gim, '<h5 class="deep-dive-h4">$1</h5>');
+      src = src.replace(/^### (.*$)/gim, '<h4 class="deep-dive-h3">$1</h4>');
+      src = src.replace(/^## (.*$)/gim, '<h3 class="deep-dive-h3">$1</h3>');
+
+      // Bold & Italic
+      src = src.replace(/\\*\\*([^*]+)\\*\\*/g, '<strong>$1</strong>');
+      src = src.replace(/\\*([^*]+)\\*/g, '<em>$1</em>');
+
+      // Paragraphs and lists
+      const lines = src.split('\\n');
+      let inList = false;
+      const html = [];
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (line.startsWith('- ') || line.startsWith('* ')) {
+          if (!inList) {
+            html.push('<ul class="deep-dive-list">');
+            inList = true;
+          }
+          html.push(`<li>${line.substring(2)}</li>`);
+        } else {
+          if (inList) {
+            html.push('</ul>');
+            inList = false;
+          }
+          if (line.length > 0) {
+            if (line.startsWith('%%%CODEBLOCK_') || line.startsWith('<h3') || line.startsWith('<h4') || line.startsWith('<h5')) {
+              html.push(line);
+            } else {
+              html.push(`<p class="deep-dive-para">${line}</p>`);
+            }
+          }
+        }
+      }
+      if (inList) html.push('</ul>');
+
+      let result = html.join('\\n');
+      result = result.replace(/%%%CODEBLOCK_(\\d+)%%%/g, (match, idx) => codeBlocks[Number(idx)]);
+      return result;
     }
 
     /* -------------------------------------------------------------
@@ -1458,9 +1872,17 @@ html_template = """<!DOCTYPE html>
       // Render Code Lines (Trap lines and tokens strictly hidden until answered!)
       const lines = q.code.split('\\n');
       const viewer = document.getElementById('code-viewer');
+      let actualTrapLine = (q.trapInfo && q.trapInfo.line) || -1;
+      if (q.trapInfo && q.trapInfo.token) {
+        const tokenIdx = lines.findIndex(l => l.includes(q.trapInfo.token));
+        if (tokenIdx !== -1) {
+          actualTrapLine = tokenIdx + 1;
+        }
+      }
+
       viewer.innerHTML = lines.map((line, idx) => {
         const lineNum = idx + 1;
-        const isTrapLine = (answered && q.trapInfo && q.trapInfo.line === lineNum);
+        const isTrapLine = (answered && actualTrapLine === lineNum);
         const trapToken = isTrapLine ? q.trapInfo.token : null;
         const formatted = highlightLineC(line, trapToken);
         const trapClass = isTrapLine ? 'trap-line' : '';
@@ -1519,7 +1941,11 @@ html_template = """<!DOCTYPE html>
           }
 
           const statusBadge = `<span style="color:${badgeColor}; font-weight:700;">${badgeText}</span>`;
-          const explanationText = opt.isCorrect ? opt.whyTempting : `${opt.whyTempting} <br><strong style="color:#f87171">Why it's wrong:</strong> ${opt.whyWrong || ''}`;
+          const escapedWhyTempting = escapeHTML(opt.whyTempting || '');
+          const escapedWhyWrong = escapeHTML(opt.whyWrong || '');
+          const explanationText = opt.isCorrect
+            ? escapedWhyTempting
+            : `${escapedWhyTempting} <br><strong style="color:#f87171">Why it's wrong:</strong> ${escapedWhyWrong}`;
           const shouldExpand = isUserPick || isCorrect;
 
           return `
@@ -1536,6 +1962,13 @@ html_template = """<!DOCTYPE html>
         }).join('');
 
         document.getElementById('c-standard-ref').innerText = `ISO Standard: ${q.explanation.cStandardRef}`;
+
+        // Render In-Depth Pedagogical Walkthrough
+        const deepDiveEl = document.getElementById('deep-dive-text');
+        if (deepDiveEl) {
+          const deepText = (q.explanation && q.explanation.deepDive) || q.explanation.summary || '';
+          deepDiveEl.innerHTML = formatMarkdown(deepText);
+        }
 
         const traces = q.executionTrace || [];
         const slider = document.getElementById('stepper-slider');
@@ -1560,7 +1993,7 @@ html_template = """<!DOCTYPE html>
       }
 
       const step = traces[State.currentStep] || traces[0];
-      document.getElementById('step-description').innerHTML = `<strong>Step ${step.step} of ${traces.length} (Line ${step.line}):</strong> ${step.description}`;
+      document.getElementById('step-description').innerHTML = `<strong>Step ${step.step} of ${traces.length} (Line ${step.line}):</strong> ${escapeHTML(step.description)}`;
       document.getElementById('stepper-slider').value = State.currentStep;
 
       document.querySelectorAll('.code-line').forEach(el => el.classList.remove('executing-line'));
@@ -1648,6 +2081,11 @@ html_template = """<!DOCTYPE html>
       const q = getActiveQuestion();
       if (State.userAnswers[q.id]) return;
 
+      if (State.mode === 'SURVIVAL' && State.lives <= 0) {
+        showGameOverModal();
+        return;
+      }
+
       const opt = q.options.find(o => o.key === key);
       const isCorrect = opt ? opt.isCorrect : false;
 
@@ -1675,8 +2113,20 @@ html_template = """<!DOCTYPE html>
         if (State.mode === 'SURVIVAL') {
           State.lives--;
           if (State.lives <= 0) {
-            setTimeout(() => alert("💀 Out of lives! Check your missed traps in the study summary!"), 150);
+            State.lives = 0;
+            saveStorage();
+            updateHeaderStats();
+            renderQuestion();
+            setTimeout(() => showGameOverModal(), 300);
+            return;
           }
+        }
+      }
+
+      if (State.mode === 'RUSH') {
+        const allAnswered = State.filteredQuestions.every(item => !!State.userAnswers[item.id]);
+        if (allAnswered) {
+          setTimeout(() => finishExamRush(false), 500);
         }
       }
 
@@ -1723,6 +2173,13 @@ html_template = """<!DOCTYPE html>
     }
 
     function setCategoryFilter(cat) {
+      if (State.mode === 'RUSH') {
+        stopRushTimer();
+        State.mode = 'STUDY';
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('mode-study').classList.add('active');
+        document.getElementById('stat-timer').style.display = 'none';
+      }
       State.filterCategory = cat;
       playSound('thock');
 
@@ -1761,14 +2218,198 @@ html_template = """<!DOCTYPE html>
         livesPill.style.display = 'none';
       }
 
+      const timerPill = document.getElementById('stat-timer');
       if (mode === 'RUSH') {
         State.filteredQuestions = [...QUESTION_BANK].sort(() => 0.5 - Math.random()).slice(0, 30);
+        timerPill.style.display = 'flex';
+        startRushTimer();
       } else {
+        timerPill.style.display = 'none';
+        stopRushTimer();
         setCategoryFilter(State.filterCategory);
       }
 
       State.currentIndex = 0;
       renderQuestion();
+    }
+
+    /* -------------------------------------------------------------
+       EXAM RUSH TIMER ENGINE
+       ------------------------------------------------------------- */
+    function startRushTimer() {
+      stopRushTimer();
+      State.rushTimerSeconds = 30 * 60; // 30:00 (1800s)
+      updateTimerDisplay();
+      State.timerInterval = setInterval(() => {
+        State.rushTimerSeconds--;
+        updateTimerDisplay();
+        if (State.rushTimerSeconds <= 0) {
+          stopRushTimer();
+          finishExamRush(true);
+        }
+      }, 1000);
+    }
+
+    function stopRushTimer() {
+      if (State.timerInterval) {
+        clearInterval(State.timerInterval);
+        State.timerInterval = null;
+      }
+    }
+
+    function updateTimerDisplay() {
+      const timerPill = document.getElementById('stat-timer');
+      if (!timerPill) return;
+      const sec = Math.max(0, State.rushTimerSeconds);
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      timerPill.innerText = `⏱️ ${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+
+      timerPill.classList.remove('timer-warning', 'timer-urgent');
+      if (sec <= 300) {
+        timerPill.classList.add('timer-urgent');
+      } else if (sec <= 600) {
+        timerPill.classList.add('timer-warning');
+      }
+    }
+
+    function finishExamRush(expired = false) {
+      stopRushTimer();
+      if (expired) {
+        playSound('wrong');
+      } else {
+        playSound('correct');
+      }
+
+      const modal = document.getElementById('rush-finish-modal');
+      const icon = document.getElementById('rush-finish-icon');
+      const title = document.getElementById('rush-finish-title');
+      const msg = document.getElementById('rush-finish-msg');
+      const stats = document.getElementById('rush-finish-stats');
+
+      const rushQuestions = State.filteredQuestions;
+      const total = rushQuestions.length;
+      let answeredCount = 0;
+      let correctCount = 0;
+
+      rushQuestions.forEach(q => {
+        const ans = State.userAnswers[q.id];
+        if (ans) {
+          answeredCount++;
+          if (ans.isCorrect) correctCount++;
+        }
+      });
+
+      const scorePct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+      const timeSpentSec = Math.max(0, (30 * 60) - State.rushTimerSeconds);
+      const spentM = Math.floor(timeSpentSec / 60);
+      const spentS = timeSpentSec % 60;
+      const timeSpentStr = `${spentM}m ${spentS}s`;
+
+      if (expired) {
+        icon.innerText = "⏰";
+        title.innerText = "Time's Up!";
+        title.style.color = "var(--accent-red)";
+        msg.innerText = "The 30-minute Exam Rush timer has expired. Your exam has been automatically submitted.";
+      } else {
+        icon.innerText = "🎓";
+        title.innerText = "Exam Completed!";
+        title.style.color = "var(--accent-green)";
+        msg.innerText = "You have completed the 30-question Exam Rush challenge!";
+      }
+
+      stats.innerHTML = `
+        <div class="stat-pill" style="flex-direction:column; padding:10px 16px;">
+          <span style="font-size:22px; font-weight:800; color:var(--accent-blue);">${scorePct}%</span>
+          <span style="font-size:11px; color:var(--text-dim);">Score</span>
+        </div>
+        <div class="stat-pill" style="flex-direction:column; padding:10px 16px;">
+          <span style="font-size:22px; font-weight:800; color:var(--accent-green);">${correctCount} / ${total}</span>
+          <span style="font-size:11px; color:var(--text-dim);">Correct</span>
+        </div>
+        <div class="stat-pill" style="flex-direction:column; padding:10px 16px;">
+          <span style="font-size:22px; font-weight:800; color:var(--accent-amber);">${timeSpentStr}</span>
+          <span style="font-size:11px; color:var(--text-dim);">Time Spent</span>
+        </div>
+      `;
+
+      modal.classList.add('open');
+    }
+
+    /* -------------------------------------------------------------
+       SURVIVAL MODE GAME OVER & RESET
+       ------------------------------------------------------------- */
+    function showGameOverModal() {
+      playSound('wrong');
+      const statsBox = document.getElementById('game-over-stats');
+      const answeredKeys = Object.keys(State.userAnswers);
+      const correctCount = answeredKeys.filter(id => State.userAnswers[id].isCorrect).length;
+      statsBox.innerHTML = `
+        <div class="stat-pill" style="flex-direction:column; padding:10px 16px;">
+          <span style="font-size:22px; font-weight:800; color:var(--accent-green);">${correctCount}</span>
+          <span style="font-size:11px; color:var(--text-dim);">Traps Survived</span>
+        </div>
+        <div class="stat-pill" style="flex-direction:column; padding:10px 16px;">
+          <span style="font-size:22px; font-weight:800; color:var(--accent-amber);">${State.streak}</span>
+          <span style="font-size:11px; color:var(--text-dim);">Final Streak</span>
+        </div>
+      `;
+      document.getElementById('game-over-modal').classList.add('open');
+    }
+
+    function restartSurvival() {
+      closeModal('game-over-modal');
+      State.lives = 3;
+      State.userAnswers = {};
+      State.streak = 0;
+      saveStorage();
+      setMode('SURVIVAL');
+    }
+
+    /* -------------------------------------------------------------
+       QUESTION PALETTE NAVIGATOR
+       ------------------------------------------------------------- */
+    function openPaletteModal() {
+      playSound('thock');
+      const grid = document.getElementById('palette-grid-content');
+      const questionsList = State.filteredQuestions;
+      const currentQ = getActiveQuestion();
+
+      grid.innerHTML = questionsList.map((q, idx) => {
+        const itemNum = idx + 1;
+        const ans = State.userAnswers[q.id];
+        const isBookmarked = State.bookmarks.has(q.id);
+        const isActive = (q.id === currentQ.id);
+
+        let statusClass = "unanswered";
+        if (ans) {
+          if (ans.revealed) statusClass = "revealed";
+          else if (ans.isCorrect) statusClass = "correct";
+          else statusClass = "wrong";
+        }
+        if (isActive) statusClass += " active";
+        if (isBookmarked) statusClass += " bookmarked";
+
+        return `
+          <div class="palette-tile ${statusClass}" onclick="jumpToQuestion(${idx})" title="Question ${itemNum}: ${escapeHTML(q.id)} - ${escapeHTML(q.title)}">
+            ${itemNum}
+          </div>
+        `;
+      }).join('');
+
+      const answeredCount = questionsList.filter(q => State.userAnswers[q.id]).length;
+      document.getElementById('palette-summary').innerText = `${answeredCount} of ${questionsList.length} answered · Click tile to jump`;
+
+      document.getElementById('palette-modal').classList.add('open');
+    }
+
+    function jumpToQuestion(index) {
+      if (index >= 0 && index < State.filteredQuestions.length) {
+        playSound('thock');
+        State.currentIndex = index;
+        closeModal('palette-modal');
+        renderQuestion();
+      }
     }
 
     function updateHeaderStats() {
@@ -1785,7 +2426,7 @@ html_template = """<!DOCTYPE html>
       }
 
       if (State.mode === 'SURVIVAL') {
-        const hearts = '❤️'.repeat(Math.max(0, State.lives)) + '🖤'.repeat(Math.max(0, 3 - State.lives));
+        const hearts = '❤️'.repeat(Math.max(0, State.lives)) + '🖤'.repeat(Math.max(0, 3 - Math.max(0, State.lives)));
         document.getElementById('stat-lives').innerText = hearts;
       }
     }
@@ -1829,9 +2470,9 @@ html_template = """<!DOCTYPE html>
             const q = QUESTION_BANK.find(item => item.id === id);
             return `
               <div class="distractor-item" style="padding:12px 16px;">
-                <strong>${q.id}: ${q.title}</strong>
-                <div style="font-size:12px; color:var(--accent-amber); margin-top:4px;">⚠️ ${q.trapInfo.shortWarning}</div>
-                <div style="font-size:11.5px; color:var(--text-dim); margin-top:3px;">${q.explanation.summary}</div>
+                <strong>${q.id}: ${escapeHTML(q.title)}</strong>
+                <div style="font-size:12px; color:var(--accent-amber); margin-top:4px;">⚠️ ${escapeHTML(q.trapInfo.shortWarning)}</div>
+                <div style="font-size:11.5px; color:var(--text-dim); margin-top:3px;">${escapeHTML(q.explanation.summary)}</div>
               </div>
             `;
           }).join('')}
@@ -1899,10 +2540,10 @@ html_template = """<!DOCTYPE html>
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
       const key = e.key.toUpperCase();
-      if (['1', 'A'].includes(key)) selectOption('A');
-      else if (['2', 'B'].includes(key) && e.key !== 'b') selectOption('B');
-      else if (['3', 'C'].includes(key)) selectOption('C');
-      else if (['4', 'D'].includes(key)) selectOption('D');
+      if (key === '1' || key === 'A') selectOption('A');
+      else if (key === '2' || key === 'B') selectOption('B');
+      else if (key === '3' || key === 'C') selectOption('C');
+      else if (key === '4' || key === 'D') selectOption('D');
       else if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
         nextQuestion();
@@ -1910,9 +2551,11 @@ html_template = """<!DOCTYPE html>
         stepNext();
       } else if (e.key === 'ArrowLeft') {
         stepPrev();
-      } else if (e.key === 'b' || e.key === 'B') {
+      } else if (key === 'K') {
         toggleBookmark();
-      } else if (e.key === 'm' || e.key === 'M') {
+      } else if (key === 'P') {
+        openPaletteModal();
+      } else if (key === 'M') {
         toggleAudio();
       }
     });
