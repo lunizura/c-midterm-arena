@@ -1,12 +1,15 @@
 # ⚡ C Midterm Arena
 
+[![CI](https://github.com/lunizura/c-midterm-arena/actions/workflows/ci.yml/badge.svg)](https://github.com/lunizura/c-midterm-arena/actions/workflows/ci.yml)
+[![Live Demo](https://img.shields.io/badge/Live%20Web-GitHub%20Pages-brightgreen?style=for-the-badge&logo=github)](https://lunizura.github.io/c-midterm-arena/)
 [![Language](https://img.shields.io/badge/Language-Pure%20C%20(C99%2FC11)-00599C?style=for-the-badge&logo=c)](https://en.wikipedia.org/wiki/C_(programming_language))
-[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20Web-0078D6?style=for-the-badge)](https://github.com/)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20Web-0078D6?style=for-the-badge)](https://github.com/lunizura/c-midterm-arena)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 [![Questions](https://img.shields.io/badge/Question%20Bank-100%20Verified%20Traps-orange?style=for-the-badge)](src/questions.h)
 
 > **The ultimate interactive desktop mastery game for university C midterm exams (*Konsep Pemrograman* / *Dasar Pemrograman* / CS101).**  
-> Features 100 curated exam traps, line-by-line machine execution stepping, visual memory diagrams, cognitive distractor analysis, and procedural retro sound effects.
+> Features 100 curated exam traps, line-by-line machine execution stepping, visual memory diagrams, cognitive distractor analysis, and procedural retro sound effects.  
+> **Play Web Edition Online:** [https://lunizura.github.io/c-midterm-arena/](https://lunizura.github.io/c-midterm-arena/)
 
 ---
 
@@ -99,24 +102,6 @@ python tests/run_all_tests.py
 * **Tier 2 — C Snippet GCC Compilation**: Compiles and verifies all non-error C snippets with GCC.
 * **Tier 3 — Asset Build Pipeline**: Validates that `build_html.py` generates web assets cleanly with exit code 0.
 * **Tier 4 — Deliverable Integrity & UX**: Audits `c_midterm_arena.html` and `index.html` for escape safety, shortcut bindings, and UI state integrity.
-
----
-
-## 📤 How to Push to GitHub
-
-To publish this project on your personal GitHub account:
-
-1. **Create a new repository on GitHub** (e.g. `c-midterm-arena`).
-2. Run the following commands in this directory:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit: C Midterm Arena v1.0.0"
-   git branch -M main
-   git remote add origin https://github.com/<YOUR-USERNAME>/c-midterm-arena.git
-   git push -u origin main
-   ```
-3. *(Optional)* Turn on **GitHub Pages** in your repo settings (pointing to `main` branch root) to make the web edition playable online via a public link!
 
 ---
 

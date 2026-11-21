@@ -22,14 +22,26 @@ jobs:
           python-version: '3.11'
 
       - name: Verify Question Bank Generation
+        shell: pwsh
         run: |
           python export_c_header.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python build_html.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Run 38-Test E2E Verification Suite
+        shell: pwsh
+        run: |
+          python tests/run_all_tests.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Compile C Binaries (CLI & Desktop Launcher)
+        shell: pwsh
         run: |
           gcc -O2 -std=c99 -Wall -Wextra src/main_cli.c src/questions.c -o c_arena_cli.exe
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           gcc -O2 -Wall -Wextra -mwindows src/app_launcher.c -o c_arena_desktop.exe
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Verify Binary Output & Question Bank Integrity
         shell: pwsh
@@ -37,6 +49,9 @@ jobs:
           if (-not (Test-Path "c_arena_cli.exe")) { throw "c_arena_cli.exe missing" }
           if (-not (Test-Path "c_arena_desktop.exe")) { throw "c_arena_desktop.exe missing" }
           .\c_arena_cli.exe --version
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           .\c_arena_cli.exe --help
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           .\c_arena_cli.exe --test
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           Write-Host "Both c_arena_cli.exe and c_arena_desktop.exe compiled and verified successfully!"
