@@ -69,7 +69,8 @@ def _run_gcc_compile(c_code, flags=None, extra_files=None):
     Returns (returncode, stdout, stderr).
     """
     if flags is None:
-        flags = ["-std=c99", "-c"]
+        # Enforce strict ISO C99 diagnostics (e.g., reject C23 label-before-declaration extension in GCC 11+).
+        flags = ["-std=c99", "-pedantic-errors", "-c"]
 
     temp_dir = tempfile.mkdtemp(prefix="c_arena_test_")
     c_file = os.path.join(temp_dir, "snippet.c")
