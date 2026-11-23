@@ -11,6 +11,10 @@
 > Features 100 curated exam traps, line-by-line machine execution stepping, visual memory diagrams, cognitive distractor analysis, and procedural retro sound effects.  
 > **Play Web Edition Online:** [https://lunizura.github.io/c-midterm-arena/](https://lunizura.github.io/c-midterm-arena/)
 
+<p align="center">
+  <img src="assets/preview.png" width="820" alt="C Midterm Arena Preview" />
+</p>
+
 ---
 
 ## 🎮 Dual Editions Included
@@ -21,7 +25,7 @@ This repository comes with **two complete editions**:
 |---|---|---|
 | **🖥️ Desktop Window App** (`c_arena_desktop.exe`) | Native C Windows GUI Launcher + Cyber-Glass Engine | Translucent frosted glass, 60fps canvas particles, mechanical keyboard sound effects, interactive memory diagrams, and zero browser tabs/URL bars. |
 | **⚡ Terminal CLI Edition** (`c_arena_cli.exe`) | 100% Pure C (`<stdio.h>`, `<windows.h>`) | ANSI color escape syntax highlighting, interactive line-by-line terminal debugger stepper, and hardware audio chimes via `Beep()`. |
-| **🌐 Standalone Web Edition** (`c_midterm_arena.html`) | Single-file HTML5/CSS/JS (247 KB) | 100% offline, zero install, shareable via WhatsApp/Discord or hostable on GitHub Pages. |
+| **🌐 Standalone Web Edition** (`c_midterm_arena.html`) | Single-file HTML5/CSS/JS (523 KB) | 100% offline, zero install, shareable via WhatsApp/Discord or hostable on GitHub Pages. |
 
 ---
 
